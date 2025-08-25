@@ -6,30 +6,33 @@
  */
 
 const winRateCalc = (playerWinRate, playerLosRate) => {
-  let baseRate = playerWinRate;
-  let newWinrate = playerWinRate;
+    const diff = playerWinRate - playerLosRate;
   if (
-    Number.isNaN(playerWinRate - playerLosRate) ||
+    Number.isNaN(diff) ||
     playerWinRate < 0 ||
-    playerLosRate < 0 || typeof (playerLosRate + playerWinRate) !== 'number' 
+    playerLosRate < 0 ||
+    typeof playerLosRate !== 'number'  || typeof playerWinRate !== "number"
   ) {
-    return "Enter valid data, pleace!";
+    return NaN;
+  }
+  if (playerWinRate === 0) return playerLosRate;
+  if (playerLosRate === 0) return playerWinRate;
+    if (diff >= 0 && diff <= 2) {
+      playerWinRate += 2;
+    } else if (diff > 2 &&diff < 20) {
+      playerWinRate += 1;
+    } else if (playerWinRate < playerLosRate) {
+    playerWinRate = playerWinRate + (Math.abs(diff) + 5) / 3;
   } 
-    if (playerWinRate === 0)  return playerLosRate;
-    if (playerLosRate === 0)  return playerWinRate;
-    if (playerWinRate >= playerLosRate) {
-      if (
-        playerWinRate - playerLosRate >= 0 &&
-        playerWinRate - playerLosRate <= 2
-      ) {
-        newWinrate += 2;
-      }
-     else  if ( playerWinRate - playerLosRate > 2 
-        && playerWinRate - playerLosRate < 20) {
-        newWinrate += 1;
-      }
-    } else  {
-      newWinrate = baseRate + (playerLosRate - baseRate + 5) / 3;
-    }
-  return parseFloat(newWinrate.toFixed(1));
+  return Number(playerWinRate.toFixed(1));
 };
+console.log(winRateCalc(10, 5));
+console.log(winRateCalc(2, 1));
+console.log(winRateCalc(30, 10));
+console.log(winRateCalc(10, 30));
+console.log(winRateCalc(0, 20));
+console.log(winRateCalc(10, 0));
+console.log(winRateCalc(10, ''));
+console.log(winRateCalc(10, undefined));
+console.log(winRateCalc(10, null));
+
